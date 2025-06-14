@@ -1,0 +1,13 @@
+.tiptap-editor .ProseMirror {
+  border: 1px solid #4a5568; 
+  border-radius: 0.375rem; 
+  padding: 0.5rem 0.75rem; 
+  min-height: 150px;
+  background-color: #2d3748; 
+  color: white;
+}
+
+.tiptap-editor .ProseMirror:focus {
+  outline: none;
+  border-color: #4299e1; 
+}

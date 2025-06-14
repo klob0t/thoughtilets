@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Goudy_Bookletter_1911 } from 'next/font/google'
 import "./globals.css";
+import Pecita from 'next/font/local'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const pecita = Pecita({
+  src: './assets/font/Pecita.otf',
+  variable: "--font-pecita",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const goudy = Goudy_Bookletter_1911({
+  variable: '--font-serif',
+  weight: '400',
+  subsets: ['latin']
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${pecita.variable} ${goudy.variable}`}>
         {children}
       </body>
     </html>
