@@ -7,7 +7,7 @@ import styles from './page.module.css'
 import ScribbleHR from '@/app/components/Line/Horizontal'
 import Line from '@/app/components/Line'
 import { RiShareBoxLine } from 'react-icons/ri'
-import html2canvas from 'html2canvas'
+import domtoimage from 'dom-to-image-more'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { SplitText } from 'gsap/all'
@@ -85,26 +85,26 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
       watermark.current!.style.display = 'block'
       button.current!.style.display = 'none'
 
-      const canvas = await html2canvas(element, {
-         backgroundColor: '#f9fafb',
-         scale: 2
+      domtoimage.toPng(element, {
+         quality: 1.0,
+         bgcolor: '#f9fafb'
+      }).then((dataUrl) => {
+         const link = document.createElement('a')
+         link.href = dataUrl
+         link.download = `${slug}-thoughilets.png`
+         link.click()
+
+         watermark.current!.style.display = 'none'
+         button.current!.style.display = 'block'
+      }).catch((error) => {
+         console.error('Snapshot failed', error)
+         watermark.current!.style.display = 'none'
+         button.current!.style.display = 'block'
       })
-
-      watermark.current!.style.display = 'none'
-      button.current!.style.display = 'block'
-
-      const data = canvas.toDataURL('image/png')
-
-      const link = document.createElement('a')
-      link.href = data
-      link.download = `${slug}.png`
-
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
    }
+
    if (isLoading) {
-      return <main className={styles.container}><p></p></main>;
+      return <main className={styles.container}><p></p></main>
    }
 
 
@@ -114,7 +114,7 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
             <p>Error: {error}</p>
             <Link href="/">Back to collection</Link>
          </main>
-      );
+      )
    }
 
    return (

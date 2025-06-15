@@ -2,6 +2,7 @@
 
 .hrCanvas {
     width: 100%;
-    height: 10px; /* The total vertical space the HR will take up */
-    display: block; /* Ensures it behaves correctly in the layout */
+    height: 10px; 
+    display: block; 
+    margin: 0em;
 }

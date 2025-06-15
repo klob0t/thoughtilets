@@ -1,8 +1,7 @@
-
 "use client"
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import styles from './page.module.css'
 
 export default function LoginPage() {
   const [secret, setSecret] = useState('')
@@ -38,18 +37,16 @@ export default function LoginPage() {
   }
 
   return (
-    <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-      <form onSubmit={handleSubmit} style={{ width: '300px', textAlign: 'center' }}>
-        <h2>Enter Secret Word</h2>
-        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>This area is restricted.</p>
+    <main className={styles.loginContainer}>
+      <form onSubmit={handleSubmit}>
+        <p>Are you thcl?</p>
         <input
           type="password"
           value={secret}
           onChange={(e) => setSecret(e.target.value)}
           required
-          style={{ width: '100%', padding: '8px', marginBottom: '1rem' }}
         />
-        <button type="submit" disabled={isLoading} style={{ width: '100%', padding: '10px' }}>
+        <button type="submit" disabled={isLoading}>
           {isLoading ? 'Verifying...' : 'Access'}
         </button>
         {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}

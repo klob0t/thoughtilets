@@ -16,7 +16,7 @@ export default function Home() {
           <Socials />
         </div>
       </header>
-      <div style={{ margin: '2rem 0' }}>
+      <div>
         <ScribbleHR />
       </div>
       <section className={styles.contentWrapper}>

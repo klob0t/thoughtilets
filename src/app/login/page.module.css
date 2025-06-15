@@ -1,0 +1,36 @@
+.loginContainer {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   background-color: var(--white);
+}
+
+.loginContainer p {
+   font-family: var(--font-pecita);
+   font-size: 1.6em;
+}
+
+.loginContainer form {
+   width: 50%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.loginContainer input {
+   padding: 0.3em;
+   width: 100%;
+   text-align: center;
+}
+
+.loginContainer button {
+   font-family: var(--font-serif);
+   background-color: transparent;
+   font-size: 1.2em;
+   border: none;
+   margin: 1em;
+   cursor: pointer;
+}
