@@ -1,0 +1,7 @@
+/* src/app/components/ScribbleHR/ScribbleHR.module.css */
+
+.hrCanvas {
+    width: 100%;
+    height: 10; /* The total vertical space the HR will take up */
+    display: block; /* Ensures it behaves correctly in the layout */
+}
