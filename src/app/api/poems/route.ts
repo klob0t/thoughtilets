@@ -13,7 +13,6 @@ export async function POST(request: Request) {
 
    try {
       const body = await request.json()
-      console.log('API received this body:', body);
       const { title, slug, content } = body
 
       if (!title || !slug || !content) {
@@ -55,7 +54,7 @@ export async function GET() {
       }
 
       return NextResponse.json(data)
-   } catch (error: any) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+   } catch (error) {
+      if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 500 })
    }
 }

@@ -20,7 +20,7 @@ export default function SubmitPage() {
             .replace(/[^\w-]+/g, '')
       }
       setSlug(generateSlug(title))
-   },[title])
+   }, [title])
 
    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -53,31 +53,34 @@ export default function SubmitPage() {
 
    return (
       <main className={styles.main}>
-         <h1>new poem</h1>
-         <form onSubmit={handleSubmit}>
-            <div className={styles.input}>
-               <label htmlFor="title">title</label><br />
-               <input
-                  id="title"
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-               />
-            </div>
-            <div className={styles.input}>
-               <label style={{ display: 'block', marginBottom: '0.5rem' }}>content</label>
-               <RichTextEditor
-                  content="<p>...</p>"
-                  onUpdate={setEditorHtml}
-               />
-            </div>
-            <div className={styles.button}>
-               <button type="submit" disabled={isLoading} style={{ padding: '10px 15px' }}>
-                  {isLoading ? 'posting...' : 'post'}
-               </button>
-            </div>
-         </form>
+         <div className={styles.wrapper}>
+            <h1>new poem</h1>
+            <form onSubmit={handleSubmit}>
+               <div className={styles.input}>
+                  <label htmlFor="title">title</label><br />
+                  <input
+                     id="title"
+                     type="text"
+                     value={title}
+                     spellCheck={false}
+                     onChange={(e) => setTitle(e.target.value)}
+                     required
+                  />
+               </div>
+               <div className={styles.input}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem' }}>content</label>
+                  <RichTextEditor
+                     content="<p>...</p>"
+                     onUpdate={setEditorHtml}
+                  />
+               </div>
+               <div className={styles.button}>
+                  <button type="submit" disabled={isLoading} style={{ padding: '10px 15px' }}>
+                     {isLoading ? 'posting...' : 'post'}
+                  </button>
+               </div>
+            </form>
+         </div>
       </main>
    );
 }

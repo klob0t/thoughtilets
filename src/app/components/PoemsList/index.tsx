@@ -26,8 +26,8 @@ export default function PoemsList() {
             }
             const data = await response.json()
             setPoems(data)
-         } catch (err: any) {
-            setError(err.message)
+         } catch (err) {
+            if (err instanceof Error) setError(err.message)
          } finally {
             setIsLoading(false)
          }
@@ -36,7 +36,7 @@ export default function PoemsList() {
    }, [])
 
    if (isLoading) {
-      return <div className={styles.poemCard}><p>loading...</p></div>
+      return <div className={styles.poemCard}><p></p></div>
    }
 
    if (error) {
@@ -44,10 +44,12 @@ export default function PoemsList() {
    }
 
    return (
-      <div className={styles.poemCard}>
-         {poems.map((poem) => (
-            <PoemCard key={poem.id} poem={poem} />
-         ))}
+      <div className={styles.poemList}>
+         <div className={styles.poemCard}>
+            {poems.map((poem) => (
+               <PoemCard key={poem.id} poem={poem} />
+            ))}
+         </div>
       </div>
    )
 }

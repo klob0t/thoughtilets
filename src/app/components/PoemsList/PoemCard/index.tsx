@@ -5,7 +5,6 @@ import { SplitText } from 'gsap/all'
 import { useRef } from 'react'
 import Link from 'next/link'
 import ScribbleHR from '@/app/components/Line/Horizontal'
-import styles from './index.module.css'
 
 gsap.registerPlugin(SplitText)
 
@@ -52,7 +51,7 @@ export default function PoemCard({ poem }: PoemCardProps) {
 
    return (
       <div ref={cardRef}>
-         <Link href={`/poems/${poem.slug}`}>
+         <Link href={`/poem/${poem.slug}`}>
             <h3>{poem.title}</h3>
             <p>{poem.content}</p>
             <ScribbleHR />
