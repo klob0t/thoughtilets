@@ -10,7 +10,7 @@ library.add(faInstagram, faXTwitter, faMedium)
 const socials = [
    { href: 'https://instagram.com/muthiabc', icon: 'instagram' as const },
    { href: 'https://x.com/euphdria', icon: 'x-twitter' as const },
-   { href: 'https://medium.com', icon: 'medium' as const }
+   { href: 'https://medium.com/@thiacial', icon: 'medium' as const }
 ]
 
 export default function Socials() {

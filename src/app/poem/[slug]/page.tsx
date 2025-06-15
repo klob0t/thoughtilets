@@ -7,7 +7,7 @@ import styles from './page.module.css'
 import ScribbleHR from '@/app/components/Line/Horizontal'
 import Line from '@/app/components/Line'
 import { RiShareBoxLine } from 'react-icons/ri'
-import domtoimage from 'dom-to-image-more'
+import html2canvas from 'html2canvas'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { SplitText } from 'gsap/all'
@@ -82,25 +82,30 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
       const element = poemContentRef.current
       if (!element) return
 
-      watermark.current!.style.display = 'block'
-      button.current!.style.display = 'none'
+      try {
+         watermark.current!.style.visibility = 'visible'
+         button.current!.style.visibility = 'hidden'
 
-      domtoimage.toPng(element, {
-         quality: 1.0,
-         bgcolor: '#f9fafb'
-      }).then((dataUrl) => {
+         const canvas = await html2canvas(element, {
+            backgroundColor: '#f9fafb',
+            scale: 2
+         })
+
+         const data = canvas.toDataURL('image/png')
          const link = document.createElement('a')
-         link.href = dataUrl
-         link.download = `${slug}-thoughilets.png`
+         link.href = data
+         link.download = `${slug} - thoughtilets.png`
+         document.body.appendChild(link)
          link.click()
+         document.body.removeChild(link)
+      } catch (error) {
+         console.error('Snapshot failed: ', error)
+      } finally {
+         watermark.current!.style.visibility = 'hidden'
+         button.current!.style.visibility = 'visible'
+      }
 
-         watermark.current!.style.display = 'none'
-         button.current!.style.display = 'block'
-      }).catch((error) => {
-         console.error('Snapshot failed', error)
-         watermark.current!.style.display = 'none'
-         button.current!.style.display = 'block'
-      })
+
    }
 
    if (isLoading) {
@@ -165,7 +170,7 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
                   <div
                      ref={watermark}
                      className={styles.watermark}
-                     style={{ display: 'none' }}
+                     style={{ visibility: 'hidden'}}
                   >
                      thoughtilets.vercel.app
                   </div>
