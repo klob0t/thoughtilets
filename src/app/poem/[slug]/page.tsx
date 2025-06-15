@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import styles from './page.module.css'
 import ScribbleHR from '@/app/components/Line/Horizontal'
-import Line from '@/app/components/Line'
+import Line, { drawLine } from '@/app/components/Line'
 import { RiShareBoxLine } from 'react-icons/ri'
 import html2canvas from 'html2canvas'
 import gsap from 'gsap'
@@ -25,8 +25,10 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
    const [error, setError] = useState<string | null>(null)
    const [isLoading, setIsLoading] = useState(true)
    const poemContentRef = useRef<HTMLDivElement>(null)
-   const watermark = useRef<HTMLDivElement>(null)
-   const button = useRef<HTMLButtonElement>(null)
+   const watermarkRef = useRef<HTMLDivElement>(null)
+   const buttonRef = useRef<HTMLButtonElement>(null)
+   const footerRef = useRef<HTMLDivElement>(null)
+   const lineRef = useRef<HTMLCanvasElement>(null)
 
    const { slug } = use(params)
 
@@ -80,11 +82,50 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
 
    const handleDownload = async () => {
       const element = poemContentRef.current
-      if (!element) return
+      const footer = footerRef.current
+      const watermark = watermarkRef.current
+      const button = buttonRef.current
+      const lineCanvas = lineRef.current
+      if (!element || !footer || !watermark || !button || !lineCanvas) return
+
+      const canvas = document.createElement('canvas')
+      const scale = 2
+
+      const originalWidth = lineCanvas.width
+      const originalHeight = lineCanvas.height
+
+      canvas.width = originalWidth * scale
+      canvas.height = originalHeight * scale
+
+      const ctx = canvas.getContext('2d')
+
+      if (ctx) {
+         ctx.scale(scale, scale)
+         drawLine(canvas)
+      }
+
+      const tempImage = new Image()
+      tempImage.src = canvas.toDataURL()
+
+      tempImage.style.width = `${originalWidth}px`
+      tempImage.style.height = `${originalHeight}px`
+
+      const tempWrapper = document.createElement('div')
+      tempWrapper.style.display = 'flex'
+      tempWrapper.style.width = `${originalWidth}px`
+      tempWrapper.style.justifyContent = 'center'
+      tempWrapper.style.alignItems = 'center'
+      tempWrapper.appendChild(tempImage)
+
 
       try {
-         watermark.current!.style.visibility = 'visible'
-         button.current!.style.visibility = 'hidden'
+         watermark.style.visibility = 'visible'
+         button.style.visibility = 'hidden'
+         footer.style.visibility = 'hidden'
+         lineCanvas.style.display = 'none'
+         element.style.aspectRatio = '4/5'
+         element.style.width = '1080px'
+         lineCanvas.parentElement?.appendChild(tempWrapper)
 
          const canvas = await html2canvas(element, {
             backgroundColor: '#f9fafb',
@@ -98,13 +139,20 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
          document.body.appendChild(link)
          link.click()
          document.body.removeChild(link)
+
       } catch (error) {
          console.error('Snapshot failed: ', error)
       } finally {
-         watermark.current!.style.visibility = 'hidden'
-         button.current!.style.visibility = 'visible'
+         watermark.style.visibility = 'hidden'
+         button.style.visibility = 'visible'
+         footer.style.visibility = 'visible'
+         lineCanvas.style.display = 'block'
+         element.style.width = '100%'
+         element.style.aspectRatio = 'unset'
+         if (tempWrapper.parentNode) {
+            tempWrapper.parentNode.removeChild(tempWrapper)
+         }
       }
-
 
    }
 
@@ -124,59 +172,71 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
 
    return (
       <main className={styles.page}>
-         <div className={styles.fullContainer} ref={poemContentRef} >
-            <div className={styles.container}>
-               <header className={styles.header}>
-                  <h1>{poem?.title}</h1>
-               </header>
-               <ScribbleHR />
-               <article className={styles.content}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                     {poem?.content}
-                  </ReactMarkdown>
-                  <div className={styles.note}>
-                     <p>—thcl</p>
-                     <p>#thoughtilets</p>
+         <div className={styles.fullContainer} ref={poemContentRef}>
+            <div className={styles.wrapper}>
+               <div className={styles.container}>
+                  <header className={styles.header}>
+                     <h1>{poem?.title}</h1>
+                  </header>
+                  <ScribbleHR />
+                  <article className={styles.content}>
+                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {poem?.content}
+                     </ReactMarkdown>
+                     <div className={styles.note}>
+                        <p>—thcl</p>
+                     </div>
+                  </article>
 
-                  </div>
+                  <footer className={styles.footer} ref={footerRef}>
 
-               </article>
-               <footer className={styles.footer}>
-                  <Link href="/">← Back to collection</Link>
-
-               </footer>
-            </div>
-            <div className={styles.line}>
-               <Line />
-               <div className={styles.info}>
-                  <button
-                     ref={button}
-                     onClick={handleDownload}
-                     style={{
-                        border: 'none',
-                        backgroundColor: 'none',
-                        padding: 0
-                     }}
-                  >
-                     <RiShareBoxLine
+                     <Link href="/">← Back to collection</Link>
+                     <button
+                        ref={buttonRef}
+                        onClick={handleDownload}
+                        title="Download as Image"
                         style={{
-                           cursor: 'pointer',
-                           fontSize: '1.4rem',
-                           margin: '0em 0em 0em 1em',
-                           display: 'block'
+                           border: 'none',
+                           backgroundColor: 'none',
+                           padding: 0,
+                           width: '40px',
+                           height: '40px',
+                           verticalAlign: 'middle',
+                           cursor: 'pointer'
                         }}
-                        title="Download as Image" />
-                  </button>
-                  <div
-                     ref={watermark}
-                     className={styles.watermark}
-                     style={{ visibility: 'hidden'}}
-                  >
-                     thoughtilets.vercel.app
-                  </div>
+                     >
+                        <RiShareBoxLine
+                           style={{
+                              fontSize: '1.5rem'
+                           }}
+                        />
+                     </button>
+                  </footer>
                </div>
+               <div className={styles.line}>
+                  <Line ref={lineRef} />
+                  <div className={styles.info}>
+
+                     <div
+                        ref={watermarkRef}
+                        className={styles.watermarkRef}
+                        style={{
+                           visibility: 'hidden',
+                           fontFamily: 'var(--font-serif)', fontSize: '1em',
+                        }}>
+                        thoughtilets.vercel.app
+                     </div>
+                  </div>
+
+               </div>
+
+
+
             </div>
+
+
          </div>
+
       </main>
    )
 }

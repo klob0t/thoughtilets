@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Infant } from 'next/font/google'
+import { Linden_Hill } from 'next/font/google'
 import "./globals.css";
 import Pecita from 'next/font/local'
 
@@ -8,7 +8,7 @@ const pecita = Pecita({
   variable: "--font-pecita",
 });
 
-const goudy = Cormorant_Infant({
+const goudy = Linden_Hill({
   variable: '--font-serif',
   weight: '400',
   subsets: ['latin']

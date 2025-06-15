@@ -10,7 +10,6 @@ export default function Home() {
       <header className={styles.header}>
         <div className={styles.title}>
           <h1>thoughtilets.</h1>
-          <h4>—thcl</h4>
         </div>
         <div className={styles.links}>
           <Socials />
@@ -25,6 +24,7 @@ export default function Home() {
         </div>
         <div className={styles.lineColumn}>
           <Line />
+          <h4>—thcl</h4>
         </div>
       </section>
     </main>

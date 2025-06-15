@@ -1,98 +1,117 @@
+
+
 .page {
-   display: flex;
-   width: 100%;
-   justify-content: center;
-   align-items: center;
-   background-color: var(--white);
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  overflow: hidden;
 }
 
 .fullContainer {
+   width: 100%;
+   height: 100%;
    display: flex;
-   width: 70%;
-   justify-content: space-between;
-   padding: 1em 0em 1em 1em;
+   justify-content: center;
+   align-items: center;
+   padding: 1em;
 }
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 1024px;
+  padding: 0em 1em 0em 1em;
+  gap: 3rem; 
+  position: relative;
+}
+
 
 .container {
-   display: flex;
-   flex-direction: column;
-   margin: 2em 0em 0em 0em;
-   flex: 3;
-   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 2em 0em 0em 0em;
+  flex: 3;
+  min-width: 0;
 }
 
-.watermark {
-   font-family: var(--font-pecita);
-   font-size: 1em;
-   color: blue;
-   margin: 1.2em 0em 0em 0em;
+.line img {
+   width: 100%;
+   object-fit: fill;
+   object-position: 50% 50%;
 }
+
+
+.line {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  position: sticky;
+  top: 2rem;
+  min-width: 0;
+}
+
+
 
 .header {
-   margin: 0em 0em 0em 0em;
+  margin: 0em;
 }
 
 .header h1 {
-   font-family: var(--font-serif);
-   margin: 0em 0em 0em 0em;
-   font-weight: 400;
+  font-family: var(--font-serif);
+  margin: 0em;
+  font-weight: 400;
 }
 
 .content {
-   margin: 1em 0em 0em 0em;
-   flex-grow: 1;
-   min-width: 100%;
+  margin: 1em 0em 0em 0em;
+  flex-grow: 1;
 }
 
 .note {
-   display: flex;
-   align-items: flex-end;
-   flex-direction: column;
-   gap: 0em;
-   margin: 0.3em 0em 0em 0em;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 0em;
+  margin: 0.3em 0em 0em 0em;
 }
 
 .note p {
-   margin: 0em 0em 0em 0em;
-   font-size: 1.5em !important;
+  margin: 0em;
+  font-size: 1.5em !important;
 }
 
 .content p {
-   font-family: var(--font-pecita);
-   font-size: 2em;
+  font-family: var(--font-pecita);
+  font-size: 2em;
+  margin: 0em 0em 0.5em 0em;
 }
 
 .footer {
-   margin: 2em 0em 0em 0em;
+  margin: 2em 0em 0em 0em;
 }
 
 .footer a {
-   font-family: var(--font-serif);
-   color: black;
-   text-decoration: none;
-   font-size: 1.4em;
-}
-
-.line {
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
-   align-items: flex-start;
+  font-family: var(--font-serif);
+  color: black;
+  text-decoration: none;
+  font-size: 1.4em;
 }
 
 .info {
-   display: flex;
-   width: 100%;
-   flex-direction: row;
-   align-items: flex-end;
-   justify-content: space-between;
-   padding: 0em 1em 0em 0em;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0em 1em 0em 0em;
 }
 
 .info button:hover {
    background-color: transparent;
 }
 
-.info button {
-   padding: 0em;
-}
+
