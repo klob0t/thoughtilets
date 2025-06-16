@@ -69,10 +69,10 @@ export default function SubmitPage() {
                </div>
                <div className={styles.input}>
                   <label style={{ display: 'block', marginBottom: '0.5rem' }}>content</label>
-                  <RichTextEditor
-                     content="<p>...</p>"
-                     onUpdate={setEditorHtml}
-                  />
+                            <RichTextEditor
+                                content="<p>...</p>"
+                                onUpdate={setEditorHtml}
+                            />
                </div>
                <div className={styles.button}>
                   <button type="submit" disabled={isLoading} style={{ padding: '10px 15px' }}>

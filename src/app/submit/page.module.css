@@ -1,5 +1,6 @@
 .main h1 {
   font-family: var(--font-serif);
+  
 }
 
 .main {
@@ -9,11 +10,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
 }
 
 .main form {
   display: flex;
   flex-direction: column;
+  width: 80%;
+  
 }
 
 .wrapper {
@@ -22,6 +26,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
+  
 }
 
 .input input {
@@ -32,6 +37,10 @@
   padding: 0.5em 0;
   margin: 0 auto;
   font-size: 1.1em;
+  overflow: hidden;
+  color: black;
+  
+  
 }
 
 .input input:focus {
@@ -60,9 +69,16 @@
 
 .button button {
   margin: 1em auto;
-  background-color: rgba(255, 255, 255, 0);
-  border: 1px solid gray;
+  background-color: var(--white);
+  border: 1px solid rgb(85, 85, 85);
+  color: black;
   font-size: 1em;
   font-family: var(--font-serif);
   cursor: pointer;
 }
+
+.input p {
+  margin: 0em 0em 0.6em 0em
+}
+
+

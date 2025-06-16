@@ -30,7 +30,6 @@ const RichTextEditor = ({ content, onUpdate }: RichTextEditorProps) => {
         class: styles.editorContent,
       },
     },
-    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       onUpdate(editor.getHTML());
     },
@@ -111,9 +110,11 @@ const RichTextEditor = ({ content, onUpdate }: RichTextEditorProps) => {
           <LuListOrdered className="h-4 w-4" />
         </Toolbar.Button>
       </Toolbar.Root>
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor}/>
     </div>
   );
 };
 
 export default RichTextEditor;
+
+

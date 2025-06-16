@@ -5,6 +5,8 @@ import { SplitText } from 'gsap/all'
 import { useRef } from 'react'
 import Link from 'next/link'
 import ScribbleHR from '@/app/components/Line/Horizontal'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 gsap.registerPlugin(SplitText)
 
@@ -24,7 +26,7 @@ export default function PoemCard({ poem }: PoemCardProps) {
 
    useGSAP(() => {
       const title = cardRef.current?.querySelector('h3')
-      const content = cardRef.current?.querySelector('p')
+      const content = cardRef.current?.querySelectorAll('p')
 
       if (title) {
          gsap.from(title, {
@@ -50,10 +52,20 @@ export default function PoemCard({ poem }: PoemCardProps) {
    }, { scope: cardRef })
 
    return (
-      <div ref={cardRef}>
+      <div ref={cardRef}
+         style={{
+            overflowWrap: 'anywhere',
+            overflow: 'hidden',
+            whiteSpace: 'normal',
+            width: '100%'
+         }}
+      >
          <Link href={`/poem/${poem.slug}`}>
             <h3>{poem.title}</h3>
-            <p>{poem.content}</p>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+               {poem?.content}
+            </ReactMarkdown>
+
             <ScribbleHR />
          </Link>
       </div>

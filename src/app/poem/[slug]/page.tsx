@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import styles from './page.module.css'
 import ScribbleHR from '@/app/components/Line/Horizontal'
-import Line, {  } from '@/app/components/Line'
+import Line, { } from '@/app/components/Line'
 import { RiShareBoxLine } from 'react-icons/ri'
 import html2canvas from 'html2canvas'
 import gsap from 'gsap'
@@ -22,16 +22,15 @@ interface Poem {
 }
 
 export default function PoemsPage({ params }: { params: Promise<{ slug: string }> }) {
-   const { startLoading, finishLoading} =useLoadingStore()
+   const { startLoading, finishLoading } = useLoadingStore()
    const isAppLoading = useLoadingStore(state => state.activeLoaders > 0)
    const [poem, setPoem] = useState<Poem | null>(null)
    const [error, setError] = useState<string | null>(null)
-   const pageRef = useRef<HTMLDivElement>(null)
-   const poemContentRef = useRef<HTMLDivElement>(null)
+   const pageRef = useRef<HTMLDivElement | null>(null)
+   const poemContentRef = useRef<HTMLDivElement | null>(null)
    const watermarkRef = useRef<HTMLDivElement>(null)
    const buttonRef = useRef<HTMLButtonElement>(null)
    const footerRef = useRef<HTMLDivElement>(null)
-   const lineRef = useRef<HTMLCanvasElement>(null)
 
    const { slug } = use(params)
 
@@ -50,7 +49,7 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
             duration: 1,
          })
       }
-   }, {dependencies: [isAppLoading]})
+   }, { dependencies: [isAppLoading] })
 
    useEffect(() => {
       if (!slug) return
@@ -59,7 +58,7 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
             setError(null)
             startLoading('Poem Page')
             const response = await fetch(`/api/poems/${slug}`)
-            
+
             if (!response.ok) {
                throw new Error('Poem not found')
             }
@@ -81,13 +80,11 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
          fetchPoems()
       }
    }, [finishLoading, startLoading, slug])
-   
 
 
 
    useGSAP(() => {
       const poem = poemContentRef.current?.querySelector('p')
-      console.log(poem)
 
       if (poem) {
          const split = new SplitText([poem], { type: 'words' })
@@ -108,43 +105,13 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
       const footer = footerRef.current
       const watermark = watermarkRef.current
       const button = buttonRef.current
-      const lineCanvas = lineRef.current
-      if (!element || !footer || !watermark || !button || !lineCanvas) return
-
-      const canvas = document.createElement('canvas')
-      const scale = 2
-
-      const originalWidth = lineCanvas.width
-      const originalHeight = lineCanvas.height
-
-      canvas.width = originalWidth * scale
-      canvas.height = originalHeight * scale
-
-   
-      const tempImage = new Image()
-      tempImage.src = canvas.toDataURL()
-
-      tempImage.style.width = `${originalWidth}px`
-      tempImage.style.height = `${originalHeight}px`
-
-      const tempWrapper = document.createElement('div')
-      tempWrapper.style.display = 'flex'
-      tempWrapper.style.width = `${originalWidth}px`
-      tempWrapper.style.justifyContent = 'center'
-      tempWrapper.style.alignItems = 'center'
-      tempWrapper.appendChild(tempImage)
-
 
       try {
-         watermark.style.visibility = 'visible'
-         button.style.visibility = 'hidden'
-         footer.style.visibility = 'hidden'
-         lineCanvas.style.display = 'none'
-         element.style.aspectRatio = '4/5'
-         element.style.width = '1080px'
-         lineCanvas.parentElement?.appendChild(tempWrapper)
+         watermark!.style.visibility = 'visible'
+         button!.style.visibility = 'hidden'
+         footer!.style.visibility = 'hidden'
 
-         const canvas = await html2canvas(element, {
+         const canvas = await html2canvas(element!.parentElement!, {
             backgroundColor: '#f9fafb',
             scale: 2
          })
@@ -160,21 +127,17 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
       } catch (error) {
          console.error('Snapshot failed: ', error)
       } finally {
-         watermark.style.visibility = 'hidden'
-         button.style.visibility = 'visible'
-         footer.style.visibility = 'visible'
-         lineCanvas.style.display = 'block'
-         element.style.width = '100%'
-         element.style.aspectRatio = 'unset'
-         if (tempWrapper.parentNode) {
-            tempWrapper.parentNode.removeChild(tempWrapper)
-         }
-      }
+         watermark!.style.visibility = 'hidden'
+         button!.style.visibility = 'visible'
+         footer!.style.visibility = 'visible'
+         element!.style.aspectRatio = 'unset'
 
+         element!.style.border = 'none'
+      }
    }
 
    if (isAppLoading) {
-      return <main className={styles.container}><p></p></main>
+      return <main className={styles.container}><p>loading...</p></main>
    }
 
 
@@ -208,54 +171,52 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
                   <footer className={styles.footer} ref={footerRef}>
 
                      <Link href="/">← Back to collection</Link>
-                     <button
-                        ref={buttonRef}
-                        onClick={handleDownload}
-                        title="Download as Image"
-                        style={{
-                           border: 'none',
-                           backgroundColor: 'none',
-                           padding: 0,
-                           width: '20px',
-                           height: '20px',
-                           verticalAlign: 'middle',
-                           cursor: 'pointer',
-                           margin: '0em 0em 0em 2em'
-                        }}
-                     >
-                        <RiShareBoxLine
-                           style={{
-                              fontSize: '1rem'
-                           }}
-                        />
-                     </button>
+
+
+
                   </footer>
                </div>
                <div className={styles.line}>
-               <div className={styles.lineWrapper}>
-                  <Line/></div>
-                  <div className={styles.info}>
-
-                     <div
-                        ref={watermarkRef}
-                        className={styles.watermarkRef}
-                        style={{
-                           visibility: 'hidden',
-                           fontFamily: 'var(--font-serif)', fontSize: '1em',
-                        }}>
-                        thoughtilets.vercel.app
-                     </div>
-                  </div>
-
+                  <Line />
                </div>
 
-
-
             </div>
+            <div className={styles.snapshot}>
+                <button
+               ref={buttonRef}
+               onClick={handleDownload}
+               title="Download as Image"
+               style={{
+                  border: 'none',
+                  backgroundColor: 'var(--white)',
+                  padding: 0,
+                  width: '20px',
+                  height: '20px',
+                  verticalAlign: 'middle',
+                  cursor: 'pointer',
+                  margin: '1em 0em 0em 0em'
+               }}
+            >
 
-
+               <RiShareBoxLine
+                  style={{
+                     fontSize: '1rem',
+                     color: 'black'
+                  }}
+               />
+            </button>
+            <div
+               ref={watermarkRef}
+               className={styles.watermarkRef}
+               style={{
+                  visibility: 'hidden',
+                  fontFamily: 'var(--font-serif)', fontSize: '1em',
+               }}>
+               thoughtilets.vercel.app
+            </div>
+        
+            </div>
          </div>
-
       </main>
    )
 }
