@@ -11,6 +11,7 @@ import html2canvas from 'html2canvas'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { SplitText } from 'gsap/all'
+import { useLoadingStore } from '@/app/lib/store/loadingStore'
 
 gsap.registerPlugin(SplitText)
 
@@ -21,9 +22,11 @@ interface Poem {
 }
 
 export default function PoemsPage({ params }: { params: Promise<{ slug: string }> }) {
+   const { startLoading, finishLoading} =useLoadingStore()
+   const isAppLoading = useLoadingStore(state => state.activeLoaders > 0)
    const [poem, setPoem] = useState<Poem | null>(null)
    const [error, setError] = useState<string | null>(null)
-   const [isLoading, setIsLoading] = useState(true)
+   const pageRef = useRef<HTMLDivElement>(null)
    const poemContentRef = useRef<HTMLDivElement>(null)
    const watermarkRef = useRef<HTMLDivElement>(null)
    const buttonRef = useRef<HTMLButtonElement>(null)
@@ -33,12 +36,30 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
    const { slug } = use(params)
 
    useEffect(() => {
+      finishLoading('Initial Page Load')
+   }, [finishLoading])
+
+   useGSAP(() => {
+      const page = pageRef.current
+
+      if (!isAppLoading) {
+         gsap.fromTo(page, {
+            opacity: 0,
+         }, {
+            opacity: 1,
+            duration: 1,
+         })
+      }
+   }, {dependencies: [isAppLoading]})
+
+   useEffect(() => {
       if (!slug) return
       const fetchPoems = async () => {
          try {
             setError(null)
+            startLoading('Poem Page')
             const response = await fetch(`/api/poems/${slug}`)
-
+            
             if (!response.ok) {
                throw new Error('Poem not found')
             }
@@ -52,14 +73,17 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
                setError('An unknown error occurered')
             }
          } finally {
-            setIsLoading(false)
+            finishLoading('Poem Page')
          }
       }
 
       if (slug) {
          fetchPoems()
       }
-   }, [slug])
+   }, [finishLoading, startLoading, slug])
+   
+
+
 
    useGSAP(() => {
       const poem = poemContentRef.current?.querySelector('p')
@@ -75,7 +99,6 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
             stagger: {
                each: 0.1
             },
-            delay: 0.1
          })
       }
    }, { scope: poemContentRef, dependencies: [poem] })
@@ -156,7 +179,7 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
 
    }
 
-   if (isLoading) {
+   if (isAppLoading) {
       return <main className={styles.container}><p></p></main>
    }
 
@@ -171,7 +194,7 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
    }
 
    return (
-      <main className={styles.page}>
+      <main className={styles.page} ref={pageRef}>
          <div className={styles.fullContainer} ref={poemContentRef}>
             <div className={styles.wrapper}>
                <div className={styles.container}>

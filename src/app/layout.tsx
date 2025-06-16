@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Linden_Hill } from 'next/font/google'
+import { Xanh_Mono } from 'next/font/google'
 import "./globals.css";
 import Pecita from 'next/font/local'
 
@@ -8,10 +8,10 @@ const pecita = Pecita({
   variable: "--font-pecita",
 });
 
-const goudy = Linden_Hill({
+const goudy = Xanh_Mono({
   variable: '--font-serif',
   weight: '400',
-  subsets: ['latin']
+  subsets: ['latin'],
 })
 
 export const metadata: Metadata = {
