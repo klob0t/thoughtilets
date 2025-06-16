@@ -17,7 +17,7 @@ export default function ScribbleHR() {
       
       const config = {
         segments: 100,      
-        maxOffsetY: 4,     
+        maxOffsetY: 1,     
         lineWidth: 1.5,
         color: '#000'   
       }

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import styles from './index.module.css'
 import PoemCard from './PoemCard'
+import { useLoadingStore } from '@/app/lib/store/loadingStore'
 
 
 interface Poem {
@@ -14,12 +15,13 @@ interface Poem {
 
 export default function PoemsList() {
    const [poems, setPoems] = useState<Poem[]>([])
-   const [isLoading, setIsLoading] = useState(true)
+   const { startLoading, finishLoading } = useLoadingStore()
    const [error, setError] = useState<string | null>(null)
 
    useEffect(() => {
       const fetchPoems = async () => {
          try {
+            startLoading('Fetching Poems')
             const response = await fetch('/api/poems')
             if (!response.ok) {
                throw new Error('Failed to fetch poems')
@@ -29,15 +31,12 @@ export default function PoemsList() {
          } catch (err) {
             if (err instanceof Error) setError(err.message)
          } finally {
-            setIsLoading(false)
+            finishLoading('Poems fetched')
          }
       }
       fetchPoems()
-   }, [])
+   }, [startLoading, finishLoading])
 
-   if (isLoading) {
-      return <div className={styles.poemCard}><p></p></div>
-   }
 
    if (error) {
       return <div className={styles.poemCard}><p>error...</p></div>

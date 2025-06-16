@@ -202,7 +202,8 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
                            width: '40px',
                            height: '40px',
                            verticalAlign: 'middle',
-                           cursor: 'pointer'
+                           cursor: 'pointer',
+                           margin: '0em 0em 0em 2em'
                         }}
                      >
                         <RiShareBoxLine
