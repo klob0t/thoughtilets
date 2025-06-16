@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import styles from './page.module.css'
 import ScribbleHR from '@/app/components/Line/Horizontal'
-import Line, { drawLine } from '@/app/components/Line'
+import Line, {  } from '@/app/components/Line'
 import { RiShareBoxLine } from 'react-icons/ri'
 import html2canvas from 'html2canvas'
 import gsap from 'gsap'
@@ -120,13 +120,7 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
       canvas.width = originalWidth * scale
       canvas.height = originalHeight * scale
 
-      const ctx = canvas.getContext('2d')
-
-      if (ctx) {
-         ctx.scale(scale, scale)
-         drawLine(canvas)
-      }
-
+   
       const tempImage = new Image()
       tempImage.src = canvas.toDataURL()
 
@@ -222,8 +216,8 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
                            border: 'none',
                            backgroundColor: 'none',
                            padding: 0,
-                           width: '40px',
-                           height: '40px',
+                           width: '20px',
+                           height: '20px',
                            verticalAlign: 'middle',
                            cursor: 'pointer',
                            margin: '0em 0em 0em 2em'
@@ -231,14 +225,15 @@ export default function PoemsPage({ params }: { params: Promise<{ slug: string }
                      >
                         <RiShareBoxLine
                            style={{
-                              fontSize: '1.5rem'
+                              fontSize: '1rem'
                            }}
                         />
                      </button>
                   </footer>
                </div>
                <div className={styles.line}>
-                  <Line ref={lineRef} />
+               <div className={styles.lineWrapper}>
+                  <Line/></div>
                   <div className={styles.info}>
 
                      <div
