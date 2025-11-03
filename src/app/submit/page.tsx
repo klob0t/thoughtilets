@@ -64,13 +64,14 @@ export default function SubmitPage() {
                      value={title}
                      spellCheck={false}
                      onChange={(e) => setTitle(e.target.value)}
+                     placeholder='title here...'
                      required
                   />
                </div>
                <div className={styles.input}>
                   <label style={{ display: 'block', marginBottom: '0.5rem' }}>content</label>
                             <RichTextEditor
-                                content="<p>...</p>"
+                                content="<p>hello, world</p>"
                                 onUpdate={setEditorHtml}
                             />
                </div>

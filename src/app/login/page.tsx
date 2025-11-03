@@ -25,7 +25,6 @@ export default function LoginPage() {
         throw new Error('Incorrect secret word.')
       }
       
-      
       router.push('/submit')
 
     } catch (err) {

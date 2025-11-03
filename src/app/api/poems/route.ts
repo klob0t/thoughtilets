@@ -1,14 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
-const supabaseURL = process.env.SUPABASE_NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.SUPABASE_NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.NEXT_PUBLIC_THOUGHTILETS_SUPABASE_ANON_KEY!
+const supabaseRoleKey = process.env.THOUGHTILETS_SUPABASE_SERVICE_ROLE_KEY!
 
 export async function POST(request: Request) {
 
    const supabase = createClient(
       supabaseURL,
-      supabaseKey
+      supabaseRoleKey,
+      { auth: { persistSession: false } }
    )
 
    try {
@@ -20,7 +22,7 @@ export async function POST(request: Request) {
       }
 
       const { data, error } = await supabase
-         .from('poems')
+         .from('thoughtilets')
          .insert([{ title, slug, content }])
          .select()
 
@@ -45,7 +47,7 @@ export async function GET() {
 
    try {
       const { data, error } = await supabase
-         .from('poems')
+         .from('thoughtilets')
          .select('*')
          .order('created_at', { ascending: false })
 
